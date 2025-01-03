@@ -67,5 +67,8 @@ dependencies {
     implementation ("androidx.compose.ui:ui:1.5.0")
     implementation ("androidx.compose.material3:material3:1.2.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
 
 }

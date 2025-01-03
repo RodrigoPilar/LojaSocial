@@ -40,4 +40,3 @@ class UserRepository(private val firestore: FirebaseFirestore) {
             }
     }
 }
-
