@@ -1,6 +1,7 @@
 package com.example.lojasocial.ui.components
 
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
@@ -25,13 +26,14 @@ fun BottomNavigationBar(
     onPortalClick: () -> Unit
 ) {
     BottomAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier.height(70.dp),
         containerColor = Color(0xFFB71C1C)
+
     ) {
         BottomNavigationIcon(
             icon = Icons.Default.Home,
             contentDescription = "Home",
-            onClick = onHomeClick
+            onClick = onHomeClick,
         )
         BottomNavigationIcon(
             icon = R.drawable.ic_checkin,
@@ -69,7 +71,7 @@ fun BottomNavigationIcon(
                 Icon(
                     imageVector = icon,
                     contentDescription = contentDescription,
-                    tint = if (isActive) Color.White else Color.Gray,
+                    tint = if (isActive) Color.Gray else Color.White,
                     modifier = Modifier.size(24.dp)
                 )
             }
@@ -77,7 +79,7 @@ fun BottomNavigationIcon(
                 Icon(
                     painter = painterResource(id = icon),
                     contentDescription = contentDescription,
-                    tint = if (isActive) Color.White else Color.Gray,
+                    tint = if (isActive) Color.Gray else Color.White,
                     modifier = Modifier.size(24.dp)
                 )
             }
