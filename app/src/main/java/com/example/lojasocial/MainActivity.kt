@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,14 +28,36 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Desativa o modo noturno
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
-        enableEdgeToEdge()
         setContent {
             val navController = rememberNavController()
             LojaSocialTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
+                // Obtemos o estado atual da rota fora do cálculo dos parâmetros
+                val currentBackStackEntry by navController.currentBackStackEntryAsState()
+                val currentRoute = currentBackStackEntry?.destination?.route
+
+                androidx.compose.material3.Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        // Mostra a TopBar apenas se não estivermos no Login
+                        if (currentRoute != Screen.Login.route) {
+                            TopBar(onUserClick = {navController.navigate(Screen.Login.route)})
+                        }
+                    },
+                    bottomBar = {
+                        // Mostra a BottomBar apenas se não estivermos no Login
+                        if (currentRoute != Screen.Login.route) {
+                            BottomNavigationBar(
+                                onHomeClick = { navController.navigate(Screen.Home.route) },
+                                onCheckInOutClick = { /* Ação Check-in/Out */ },
+                                onCalendarClick = { /* Ação Calendário */ },
+                                onDonationsClick = { /* Ação Doações */ },
+                                onPortalClick = { /* Ação Portal */ }
+                            )
+                        }
+                    }
                 ) { innerPadding ->
                     NavHost(
                         navController = navController,
@@ -49,7 +73,12 @@ class MainActivity : ComponentActivity() {
                         }
 
                         composable(Screen.Home.route) {
-                            HomeView()
+                            HomeView(
+                                onCheckInOutClick = { /* Ação Check-in/Out */ },
+                                onCalendarClick = { /* Ação Calendário */ },
+                                onDonationsClick = { /* Ação Doações */ },
+                                onPortalClick = { /* Ação Portal */ }
+                            )
                         }
                     }
 
@@ -66,6 +95,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 }
 

@@ -27,7 +27,7 @@ fun TopBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primary, // Cor de fundo
+            containerColor = Color(0xFFB71C1C),
             navigationIconContentColor = Color.White // Cor do ícone
         ),
         modifier = androidx.compose.ui.Modifier.height(56.dp)

@@ -58,8 +58,7 @@ fun LoginView(
                         Toast.makeText(context, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                         onLoginSuccess()
                     },
-                    onFailure = { errorMessage ->
-                        Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
+                    onFailure = { Toast.makeText(context, "Credenciais inseridas inválidas!", Toast.LENGTH_SHORT).show()
                     }
                 )
             },
