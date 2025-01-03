@@ -1,20 +1,44 @@
 package com.example.lojasocial.ui.check
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.lojasocial.repositories.CheckInOutRepository
+import kotlinx.coroutines.launch
 
-// ViewModel responsável por gerir a lógica de Check-in e Check-out
-class CheckViewModel : ViewModel() {
+class CheckViewModel(private val repository: CheckInOutRepository) : ViewModel() {
 
-    // Instância do repositório que irá comunicar com o Firestore
-    private val repository = CheckInOutRepository()
+    private val _checkInOutState = MutableLiveData<CheckInOutState>()
+    val checkInOutState: LiveData<CheckInOutState> = _checkInOutState
 
-    // Função que será chamada pela UI para realizar o Check-in ou Check-out
-    fun checkInOut(status: String, onResult: (Boolean) -> Unit) {
-        // Chama o repositório para realizar o Check-in ou Check-out
-        repository.checkInOut(status) { success ->
-            // Retorna o resultado (sucesso ou falha) para a UI
-            onResult(success)
+    init {
+        _checkInOutState.value = CheckInOutState("idle")
+    }
+
+    fun checkIn(userId: String) {
+        viewModelScope.launch {
+            try {
+                _checkInOutState.value = CheckInOutState("loading")
+                val result = repository.checkIn(userId)
+                _checkInOutState.value = result
+            } catch (e: Exception) {
+                // Lidar com erros
+                _checkInOutState.value = CheckInOutState("error")
+            }
+        }
+    }
+
+    fun checkOut(userId: String) {
+        viewModelScope.launch {
+            try {
+                _checkInOutState.value = CheckInOutState("loading")
+                val result = repository.checkOut(userId)
+                _checkInOutState.value = result
+            } catch (e: Exception) {
+                // Lidar com erros
+                _checkInOutState.value = CheckInOutState("error")
+            }
         }
     }
 }
