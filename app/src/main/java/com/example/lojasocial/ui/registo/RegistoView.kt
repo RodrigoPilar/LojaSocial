@@ -1,26 +1,25 @@
-package com.example.lojasocial.ui.login
+package com.example.lojasocial.ui.registo
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 
 @Composable
-fun LoginView(
+fun RegistoView(
     modifier: Modifier = Modifier,
-    onLoginSuccess: () -> Unit = {},
-    onNavigateToRegisto: () -> Unit = {}
-
+    onRegistrationSuccess: () -> Unit = {}
 ) {
     // Inicializa o ViewModel e observa o estado
-    val viewModel: LoginViewModel = viewModel()
+    val viewModel: RegistoViewModel = viewModel()
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
@@ -31,7 +30,17 @@ fun LoginView(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Campo de email
+        // Campo de Nome Completo
+        TextField(
+            value = state.nome,
+            onValueChange = { viewModel.onNomeChange(it) },
+            label = { Text("Nome Completo") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Campo de Email
         TextField(
             value = state.email,
             onValueChange = { viewModel.onEmailChange(it) },
@@ -41,7 +50,7 @@ fun LoginView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Campo de password
+        // Campo de Password
         TextField(
             value = state.password,
             onValueChange = { viewModel.onPasswordChange(it) },
@@ -52,31 +61,46 @@ fun LoginView(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Botão de login
+        // Campo de Telefone
+        TextField(
+            value = state.telefone,
+            onValueChange = { viewModel.onTelefoneChange(it) },
+            label = { Text("Nº Telemóvel") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botão de Registo
         Button(
             onClick = {
-                viewModel.login(
+                viewModel.registar(
                     onSuccess = {
-                        Toast.makeText(context, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
-                        onLoginSuccess()
+                        Toast.makeText(context, "Registo efetuado com sucesso!", Toast.LENGTH_SHORT).show()
+                        onRegistrationSuccess()
                     },
-                    onFailure = { Toast.makeText(context, "Credenciais inseridas inválidas!", Toast.LENGTH_SHORT).show()
+                    onFailure = {
+                        Toast.makeText(context, "Erro ao efetuar registo.", Toast.LENGTH_SHORT).show()
                     }
                 )
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Login")
+            Text("Registar")
         }
 
-        // Link para registo
-        TextButton(onClick = { onNavigateToRegisto() }) {
+        // Exibe mensagem de erro se houver
+        state.errorMessage?.let {
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "Não tem conta? Registe-se já",
-                color = MaterialTheme.colorScheme.primary
+                text = it,
+                color = MaterialTheme.colorScheme.error,
+                modifier = Modifier.align(Alignment.Start)
             )
         }
     }
 }
+
+
 
 

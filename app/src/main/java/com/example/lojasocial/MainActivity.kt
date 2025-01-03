@@ -20,6 +20,7 @@ import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
 import com.example.lojasocial.ui.login.LoginView
+import com.example.lojasocial.ui.registo.RegistoView
 import com.example.lojasocial.ui.theme.LojaSocialTheme
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -42,13 +43,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         // Mostra a TopBar apenas se não estivermos no Login
-                        if (currentRoute != Screen.Login.route) {
+                        if (currentRoute != Screen.Login.route &&  currentRoute != Screen.Registo.route) {
                             TopBar(onUserClick = {navController.navigate(Screen.Login.route)})
                         }
                     },
                     bottomBar = {
                         // Mostra a BottomBar apenas se não estivermos no Login
-                        if (currentRoute != Screen.Login.route) {
+                        if (currentRoute != Screen.Login.route &&  currentRoute != Screen.Registo.route) {
                             BottomNavigationBar(
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
@@ -64,12 +65,29 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.Login.route,
                         modifier = Modifier.padding(innerPadding)
                     ) {
+                        // Página de login
                         composable(Screen.Login.route) {
-                            LoginView(onLoginSuccess = {
-                                navController.navigate(Screen.Home.route) {
-                                    popUpTo(Screen.Login.route) { inclusive = true }
+                            LoginView(
+                                onLoginSuccess = {
+                                    navController.navigate(Screen.Home.route) {
+                                        popUpTo(Screen.Login.route) { inclusive = true }
+                                    }
+                                },
+                                onNavigateToRegisto = {
+                                    navController.navigate(Screen.Registo.route)
                                 }
-                            })
+                            )
+                        }
+
+                        // Página de registo
+                        composable(Screen.Registo.route) {
+                            RegistoView(
+                                onRegistrationSuccess = {
+                                    navController.navigate(Screen.Login.route) {
+                                        popUpTo(Screen.Registo.route) { inclusive = true }
+                                    }
+                                }
+                            )
                         }
 
                         composable(Screen.Home.route) {
@@ -101,5 +119,6 @@ class MainActivity : ComponentActivity() {
 
 sealed class Screen(val route: String) {
     object Login : Screen("login")
+    object Registo : Screen("registo")
     object Home : Screen("home")
 }
