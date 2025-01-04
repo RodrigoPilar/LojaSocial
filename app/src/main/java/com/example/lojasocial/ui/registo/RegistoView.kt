@@ -84,7 +84,8 @@ fun RegistoView(
                     }
                 )
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C)),
         ) {
             Text("Registar")
         }

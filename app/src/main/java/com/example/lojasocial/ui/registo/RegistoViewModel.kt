@@ -76,7 +76,8 @@ class RegistoViewModel : ViewModel() {
                     val user = hashMapOf(
                         "nome" to nome,
                         "email" to email,
-                        "telefone" to telefone
+                        "telefone" to telefone,
+                        "role" to "user"
                     )
 
                     FirebaseFirestore.getInstance()

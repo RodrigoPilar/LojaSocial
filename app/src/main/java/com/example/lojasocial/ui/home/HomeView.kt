@@ -26,7 +26,8 @@ fun HomeView(
     onCheckInOutClick: () -> Unit = {},
     onCalendarClick: () -> Unit = {},
     onDonationsClick: () -> Unit = {},
-    onPortalClick: () -> Unit = {}
+    onPortalClick: () -> Unit = {},
+    showPortal: Boolean
 ) {
     Column(
         modifier = Modifier
@@ -52,11 +53,15 @@ fun HomeView(
             iconId = R.drawable.ic_donation,
             onClick = onDonationsClick
         )
-        NavigationButton(
-            text = "Portal de Avaliação",
-            iconId = R.drawable.ic_rateview,
-            onClick = onPortalClick
-        )
+
+        // Botão do Portal de Avaliação, exibido apenas se showPortal for true
+        if (showPortal) {
+            NavigationButton(
+                text = "Portal de Avaliação",
+                iconId = R.drawable.ic_rateview,
+                onClick = onPortalClick
+            )
+        }
     }
 }
 

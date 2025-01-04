@@ -3,7 +3,8 @@ package com.example.lojasocial.repositories
 import com.example.lojasocial.models.User
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
-
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.tasks.await
 
 data class User(
     val id: String = "",
@@ -12,31 +13,27 @@ data class User(
     val role: String = "" // e.g., "admin", "voluntário", etc.
 )
 
-class UserRepository(private val firestore: FirebaseFirestore) {
+class UserRepository {
+    private val firestore = FirebaseFirestore.getInstance()
 
-    private val usersCollection = firestore.collection("users")
+    suspend fun getUserRole(): String {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+            ?: return "user" // Se não houver utilizador autenticado, assume "user"
 
-    // Obter dados do utilizador pelo ID
-    fun getUserById(
-        userId: String,
-        onSuccess: (User) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        usersCollection.document(userId).get()
-            .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val user = document.toObject<User>()
-                    if (user != null) {
-                        onSuccess(user)
-                    } else {
-                        onFailure(Exception("Erro ao converter os dados do utilizador."))
-                    }
-                } else {
-                    onFailure(Exception("Utilizador não encontrado no Firestore."))
-                }
-            }
-            .addOnFailureListener { exception ->
-                onFailure(exception)
-            }
+        return try {
+            val document = firestore.collection("utilizadores")
+                .document(uid)
+                .get()
+                .await()
+
+            // Obtemos a role do documento, ou "user" se não for encontrada
+            document.getString("role") ?: "user"
+        } catch (e: Exception) {
+            "user" // Em caso de erro, assume "user"
+        }
     }
+
 }
+
+
+
