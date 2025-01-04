@@ -34,7 +34,7 @@ fun UserMenu(onProfileClick: () -> Unit, onLogoutClick: () -> Unit) {
             expanded = expanded,
             onDismissRequest = { expanded = false },
             modifier = Modifier
-                .background(Color(0xFFBD3232))
+                .background(Color(0xFFBD4143))
         ) {
 
             DropdownMenuItem(

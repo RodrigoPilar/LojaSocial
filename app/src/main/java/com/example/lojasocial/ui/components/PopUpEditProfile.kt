@@ -44,7 +44,7 @@ fun Popup(
         confirmButton = {
             Button(
                 onClick = { onConfirm(newPassword, confirmPassword) },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB93535))
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBD4143))
             ) {
                 Text("Confirmar")
             }

@@ -22,6 +22,7 @@ import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
+import com.example.lojasocial.ui.donations.donationsView
 import com.example.lojasocial.ui.login.LoginView
 import com.example.lojasocial.ui.profile.ProfileView
 import com.example.lojasocial.ui.registo.RegistoView
@@ -85,7 +86,7 @@ class MainActivity : ComponentActivity() {
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
                                 onCalendarClick = { /* Ação Calendário */ },
-                                onDonationsClick = { /* Ação Doações */ },
+                                onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onPortalClick = { /* Ação Portal */ },
                                 showPortal = (userRole.value == "admin")
                             )
@@ -126,7 +127,7 @@ class MainActivity : ComponentActivity() {
                             HomeView(
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
                                 onCalendarClick = { /* Ação Calendário */ },
-                                onDonationsClick = { /* Ação Doações */ },
+                                onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onPortalClick = { /* Ação Portal */ },
                                 showPortal = (userRole.value == "admin")
                             )
@@ -134,6 +135,13 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Profile.route) {
                             ProfileView()
+                        }
+
+                        // Página de doações
+                        composable(Screen.Donations.route) {
+                            donationsView(
+                                onFileSelected = { /* Ação ao selecionar um ficheiro */ }
+                            )
                         }
                     }
 
@@ -173,4 +181,5 @@ sealed class Screen(val route: String) {
     object Registo : Screen("registo")
     object Home : Screen("home")
     object Profile : Screen("profile")
+    object Donations : Screen("donations")
 }
