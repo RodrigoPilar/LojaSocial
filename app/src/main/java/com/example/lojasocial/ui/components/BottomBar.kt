@@ -33,7 +33,7 @@ fun BottomNavigationBar(
 ) {
     BottomAppBar(
         modifier = Modifier.height(64.dp),
-        containerColor = Color(0xFFB71C1C)
+        containerColor = Color(0xFFBD4143)
     ) {
         BottomNavigationIcon(
             icon = Icons.Default.Home,

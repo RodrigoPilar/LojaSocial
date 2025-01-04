@@ -91,7 +91,8 @@ class RegistoViewModel : ViewModel() {
                             onSuccess()
                         }
                         .addOnFailureListener { exception ->
-                            val errorMessage = exception.localizedMessage ?: "Erro ao guardar os dados."
+                            val errorMessage =
+                                exception.localizedMessage ?: "Erro ao guardar os dados."
                             _state.update { currentState ->
                                 currentState.copy(errorMessage = errorMessage)
                             }

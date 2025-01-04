@@ -70,7 +70,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
-
+    
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
 
 }

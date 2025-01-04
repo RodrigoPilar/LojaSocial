@@ -66,7 +66,7 @@ fun LoginView(
                 )
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C)),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBD4143)),
         ) {
             Text("Login")
         }
@@ -75,7 +75,7 @@ fun LoginView(
         TextButton(onClick = { onNavigateToRegisto() }) {
             Text(
                 text = "Não tem conta? Registe-se já",
-                color = Color(0xFFB71C1C),
+                color = Color(0xFFBD4143),
             )
         }
     }

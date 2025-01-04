@@ -27,7 +27,7 @@ fun TopBar(
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color(0xFFB71C1C), // Cor de fundo da TopBar
+            containerColor = Color(0xFFBD4143), // Cor de fundo da TopBar
             navigationIconContentColor = Color.White, // Cor do ícone
         ),
         modifier = Modifier.height(56.dp)
