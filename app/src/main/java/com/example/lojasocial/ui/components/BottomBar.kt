@@ -1,5 +1,9 @@
 package com.example.lojasocial.ui.components
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -9,6 +13,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -23,17 +28,17 @@ fun BottomNavigationBar(
     onCheckInOutClick: () -> Unit,
     onCalendarClick: () -> Unit,
     onDonationsClick: () -> Unit,
-    onPortalClick: () -> Unit
+    onPortalClick: () -> Unit,
+    showPortal: Boolean
 ) {
     BottomAppBar(
-        modifier = Modifier.height(70.dp),
-        containerColor = Color(0xFFB71C1C)
-
+        modifier = Modifier.height(64.dp),
+        containerColor = Color(0xFFBD4143)
     ) {
         BottomNavigationIcon(
             icon = Icons.Default.Home,
             contentDescription = "Home",
-            onClick = onHomeClick,
+            onClick = onHomeClick
         )
         BottomNavigationIcon(
             icon = R.drawable.ic_checkin,
@@ -50,11 +55,13 @@ fun BottomNavigationBar(
             contentDescription = "Doações",
             onClick = onDonationsClick
         )
-        BottomNavigationIcon(
-            icon = R.drawable.ic_rateview,
-            contentDescription = "Portal de Avaliação",
-            onClick = onPortalClick
-        )
+        if (showPortal) { // Mostra o botão Portal apenas se showPortal for true
+            BottomNavigationIcon(
+                icon = R.drawable.ic_rateview,
+                contentDescription = "Portal de Avaliação",
+                onClick = onPortalClick
+            )
+        }
     }
 }
 
@@ -72,7 +79,7 @@ fun BottomNavigationIcon(
                     imageVector = icon,
                     contentDescription = contentDescription,
                     tint = if (isActive) Color.Gray else Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(35.dp)
                 )
             }
             is Int -> {
@@ -80,7 +87,7 @@ fun BottomNavigationIcon(
                     painter = painterResource(id = icon),
                     contentDescription = contentDescription,
                     tint = if (isActive) Color.Gray else Color.White,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(35.dp)
                 )
             }
             else -> throw IllegalArgumentException("Tipo de ícone inválido: $icon")

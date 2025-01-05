@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
@@ -64,7 +65,8 @@ fun LoginView(
                     }
                 )
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBD4143)),
         ) {
             Text("Login")
         }
@@ -73,7 +75,7 @@ fun LoginView(
         TextButton(onClick = { onNavigateToRegisto() }) {
             Text(
                 text = "Não tem conta? Registe-se já",
-                color = MaterialTheme.colorScheme.primary
+                color = Color(0xFFBD4143),
             )
         }
     }

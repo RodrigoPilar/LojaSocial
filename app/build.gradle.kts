@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lojasocial"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -69,6 +69,16 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation ("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
+    implementation ("androidx.compose.compiler:compiler:1.5.0")
+    implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
+
+
+
 
 
     implementation("com.google.android.material:material:1.11.0")
