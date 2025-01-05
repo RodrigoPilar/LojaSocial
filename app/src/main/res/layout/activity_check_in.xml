@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Header com os botões Check-in e Check-out -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/checkInButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check-in"
+            android:textColor="@android:color/white"
+            android:backgroundTint="" />
+
+        <Button
+            android:id="@+id/checkOutButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Check-out"
+            android:textColor="@android:color/white"
+            android:backgroundTint="" />
+    </LinearLayout>
+
+    <!-- Switch para primeira visita -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Primeira visita?"
+        android:textSize="16sp"
+        android:paddingTop="20dp"
+        android:paddingBottom="8dp"/>
+
+    <Switch
+        android:id="@+id/firstVisitSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <!-- Campos de entrada para dados -->
+    <EditText
+        android:id="@+id/fullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nome Completo"
+        android:padding="12dp"
+        android:inputType="textPersonName"/>
+
+    <EditText
+        android:id="@+id/phoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nº de Telefone"
+        android:padding="12dp"
+        android:inputType="phone"/>
+
+    <EditText
+        android:id="@+id/familyStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Agregado Familiar"
+        android:padding="12dp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/nationality"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nacionalidade"
+        android:padding="12dp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/residenceArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Frequência/Zona de Residência"
+        android:padding="12dp"
+        android:inputType="text"/>
+
+    <!-- Botão para registo -->
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registar"
+        android:textColor="@android:color/white"
+        android:backgroundTint="@colo"
+        android:layout_marginTop="20dp"/>
+
+    <!-- Rodapé com ícones de navegação -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <ImageButton
+            android:src=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:src="@drawable/ic_calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"/>
+
+        <ImageButton
+            android:src=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"/>
+    </LinearLayout>
+</LinearLayout>
