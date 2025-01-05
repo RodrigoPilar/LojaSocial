@@ -28,6 +28,7 @@ import com.example.lojasocial.ui.donations.donationsView
 import com.example.lojasocial.ui.login.LoginView
 import com.example.lojasocial.ui.profile.ProfileView
 import com.example.lojasocial.ui.registo.RegistoView
+import com.example.lojasocial.ui.check.CheckInView
 import com.example.lojasocial.ui.theme.LojaSocialTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -89,7 +90,8 @@ class MainActivity : ComponentActivity() {
                         if (currentRoute != Screen.Login.route && currentRoute != Screen.Registo.route) {
                             BottomNavigationBar(
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
-                                onCheckInOutClick = { /* Ação Check-in/Out */ },
+                                onCheckInClick = { navController.navigate(Screen.CheckIn.route) },
+                                onCheckOutClick = { /* Ação Check-in/Out */ },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onCalendarClick = { navController.navigate(Screen.Calendar.route)},
                                 onPortalClick = { /* Ação Portal */ },
@@ -130,7 +132,8 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Home.route) {
                             HomeView(
-                                onCheckInOutClick = { /* Ação Check-in/Out */ },
+                                onCheckInClick = { navController.navigate(Screen.CheckIn.route) },
+                                onCheckOutClick = { /* Ação Check-in/Out */ },
                                 onCalendarClick = { navController.navigate(Screen.Calendar.route) },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onPortalClick = { /* Ação Portal */ },
@@ -140,6 +143,10 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.Profile.route) {
                             ProfileView()
+                        }
+
+                        composable(Screen.CheckIn.route) {
+                            CheckInView()
                         }
 
                         // Página de doações
@@ -198,5 +205,6 @@ sealed class Screen(val route: String) {
     object Donations : Screen("donations")
     object DonationsList : Screen("donationsList")
     object Calendar : Screen("calendar")
+    object CheckIn : Screen("checkin")
 
 }
