@@ -20,8 +20,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
+//import com.example.lojasocial.ui.calendar.CalendarView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
+import com.example.lojasocial.ui.donations.DonationsListView
 import com.example.lojasocial.ui.donations.donationsView
 import com.example.lojasocial.ui.login.LoginView
 import com.example.lojasocial.ui.profile.ProfileView
@@ -30,6 +32,7 @@ import com.example.lojasocial.ui.theme.LojaSocialTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -40,6 +43,8 @@ class MainActivity : ComponentActivity() {
 
         // Desativa o modo noturno
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        // Inicializa o ThreeTenABP para suporte a LocalDate em API < 26
+        AndroidThreeTen.init(this)
 
         setContent {
             val navController = rememberNavController()
@@ -85,8 +90,8 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
-                                onCalendarClick = { /* Ação Calendário */ },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
+                                onCalendarClick = { navController.navigate(Screen.Calendar.route)},
                                 onPortalClick = { /* Ação Portal */ },
                                 showPortal = (userRole.value == "admin")
                             )
@@ -126,7 +131,7 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Home.route) {
                             HomeView(
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
-                                onCalendarClick = { /* Ação Calendário */ },
+                                onCalendarClick = { navController.navigate(Screen.Calendar.route) },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onPortalClick = { /* Ação Portal */ },
                                 showPortal = (userRole.value == "admin")
@@ -140,9 +145,18 @@ class MainActivity : ComponentActivity() {
                         // Página de doações
                         composable(Screen.Donations.route) {
                             donationsView(
-                                onFileSelected = { /* Ação ao selecionar um ficheiro */ }
+                                isAdmin = userRole.value == "admin",
+                                onConsultarDoacoesClick = {
+                                    navController.navigate(Screen.DonationsList.route)
+                                }
                             )
                         }
+                        composable(Screen.DonationsList.route) {
+                            DonationsListView()
+                        }
+                        /*composable(Screen.Calendar.route) {
+                            CalendarView()
+                        }*/
                     }
 
                     DisposableEffect(Unit) {
@@ -182,4 +196,7 @@ sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Profile : Screen("profile")
     object Donations : Screen("donations")
+    object DonationsList : Screen("donationsList")
+    object Calendar : Screen("calendar")
+
 }

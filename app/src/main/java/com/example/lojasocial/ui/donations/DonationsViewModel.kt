@@ -1,19 +1,12 @@
 package com.example.lojasocial.ui.donations
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
-import com.example.lojasocial.Screen
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import android.util.Log
+
 
 data class DonationsState(
     val nome: String = "",
@@ -24,11 +17,23 @@ data class DonationsState(
     val valor: String = "",
     var tipo: String = "",
     val filePath: String = "",
+    val errorMessage: String? = null // Campo para armazenar mensagens de erro
+)
+
+data class Donation(
+    val nome: String = "",
+    val telefone: String = "",
+    val data: String = "",
+    val tipo: String = "",
+    val valor: String = "",
+    val outros: String = "",
 )
 
 class DonationsViewModel : ViewModel() {
     private val _state = MutableStateFlow(DonationsState())
     val state: StateFlow<DonationsState> = _state
+    private val _donations = MutableStateFlow<List<DonationsState>>(emptyList())
+    val donations: StateFlow<List<DonationsState>> = _donations
 
     // Atualizar o campo Nome
     fun onNomeChange(nome: String) {
@@ -64,98 +69,64 @@ class DonationsViewModel : ViewModel() {
         _state.update { currentState -> currentState.copy(tipo = tipo) }
     }
 
-    //guardar doação
-    fun guardar(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        val nome = _state.value.nome
-        val telefone = _state.value.telefone
-        val data = _state.value.data
-        val ficheiro = _state.value.ficheiro
-        val outros = _state.value.outros
-        val valor = _state.value.valor
-        val tipo = _state.value.tipo
-        val filePath = _state.value.filePath
-        var errorMessage = ""
-
-        if (tipo.isBlank() || data.isBlank()) {
-            errorMessage = "Por favor, preencha todos os campos"
-            _state.update { currentState ->
-                currentState.copy(error(message = errorMessage))
-            }
-        } else if ((tipo == "Outros" && outros.isBlank()) ||
-            (tipo == "Dinheiro" && valor.isBlank())
-        ) {
-            _state.update { currentState ->
-                currentState.copy(error(message = errorMessage))
-            }
-            return
-        } else {
-            val donation = hashMapOf(
-                "nome" to nome,
-                "telefone" to telefone,
-                "data" to data,
-                "ficheiro" to ficheiro,
-                "outros" to outros,
-                "valor" to valor,
-                "tipo" to tipo,
-                "filePath" to filePath
-            )
-        } //Remover após logica
-
-        /*
-        // Criar Doação no Firebase
-        Firebase
-            .createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Obter o UID do utilizador
-                    val userId = task.result?.user?.uid ?: ""
-
-                    // Guardar os dados adicionais no Firestore
-                    val user = hashMapOf(
-                        "nome" to nome,
-                        "email" to email,
-                        "telefone" to telefone,
-                        "role" to "user"
-                    )
-
-                    FirebaseFirestore.getInstance()
-                        .collection("utilizadores")
-                        .document(userId)
-                        .set(user)
-                        .addOnSuccessListener {
-                            _state.update { currentState ->
-                                currentState.copy(isRegistered = true, errorMessage = null)
-                            }
-                            onSuccess()
-                        }
-                        .addOnFailureListener { exception ->
-                            val errorMessage =
-                                exception.localizedMessage ?: "Erro ao guardar os dados."
-                            _state.update { currentState ->
-                                currentState.copy(errorMessage = errorMessage)
-                            }
-                            onFailure(errorMessage)
-                        }
-
-                }
-
-            }*/
-    }
-
-    //ao guardar doação
+    // Função para resetar o estado após guardar a doação
     fun onDonationSaved() {
-        _state.update { currentState ->
-            currentState.copy(
-                nome = "",
-                telefone = "",
-                data = "",
-                ficheiro = "",
-                outros = "",
-                valor = "",
-                tipo = "",
-                filePath = ""
-            )
+        _state.update {
+            DonationsState() // Reseta para os valores padrão
         }
-    return
     }
+
+    // Função para guardar no Firestore
+    fun guardar(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        val donation = hashMapOf(
+            "nome" to _state.value.nome,
+            "telefone" to _state.value.telefone,
+            "data" to _state.value.data,
+            "ficheiro" to _state.value.ficheiro,
+            "outros" to _state.value.outros,
+            "valor" to _state.value.valor,
+            "tipo" to _state.value.tipo,
+            "filePath" to _state.value.filePath
+        )
+
+        if (_state.value.tipo.isBlank() || _state.value.data.isBlank()) {
+            _state.update { it.copy(errorMessage = "Por favor, preencha todos os campos obrigatórios.") }
+            onFailure("Por favor, preencha todos os campos obrigatórios.")
+            return
+        }
+
+        FirebaseFirestore.getInstance()
+            .collection("donations") // Nome da coleção no Firestore
+            .add(donation)
+            .addOnSuccessListener {
+                onSuccess() // Chama o callback de sucesso
+                onDonationSaved() // Limpa o formulário após sucesso
+            }
+            .addOnFailureListener { exception ->
+                val errorMessage = exception.localizedMessage ?: "Erro ao guardar a doação."
+                _state.update { it.copy(errorMessage = errorMessage) }
+                onFailure(errorMessage) // Chama o callback de erro
+            }
+    }
+
+    init {
+        fetchDonations()
+    }
+
+    private fun fetchDonations() {
+        FirebaseFirestore.getInstance()
+            .collection("donations")
+            .get()
+            .addOnSuccessListener { result ->
+                val donationsList = result.map { document ->
+                    document.toObject(DonationsState::class.java)
+                }
+                _donations.value = donationsList
+            }
+            .addOnFailureListener { exception ->
+                Log.e("DonationsViewModel", "Erro ao buscar doações", exception)
+            }
+    }
+
 }
+
