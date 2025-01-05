@@ -20,6 +20,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
+import com.example.lojasocial.ui.calendar.CalendarViewVoluntario
 //import com.example.lojasocial.ui.calendar.CalendarView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
@@ -36,6 +37,7 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -151,6 +153,20 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+
+                        // Calendário
+                        composable(Screen.Calendar.route) {
+                            CalendarViewVoluntario(
+                                onDaySelected =  {selectedDate ->
+                                    println("Selected date: $selectedDate")
+                                },
+                                selectedDates = listOf(
+                                    LocalDate.of(2025, 1, 5), // Example date 1
+                                    LocalDate.of(2025, 1, 10) // Example date 2
+                                )
+                            )
+                        }
+
                         composable(Screen.DonationsList.route) {
                             DonationsListView()
                         }
