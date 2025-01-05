@@ -3,16 +3,11 @@ package com.example.lojasocial
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,8 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
-import com.example.lojasocial.ui.calendar.CalendarViewVoluntario
-//import com.example.lojasocial.ui.calendar.CalendarView
+import com.example.lojasocial.ui.calendar.CalendarView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
 import com.example.lojasocial.ui.donations.DonationsListView
@@ -31,9 +25,7 @@ import com.example.lojasocial.ui.profile.ProfileView
 import com.example.lojasocial.ui.registo.RegistoView
 import com.example.lojasocial.ui.theme.LojaSocialTheme
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,8 +37,6 @@ class MainActivity : ComponentActivity() {
 
         // Desativa o modo noturno
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        // Inicializa o ThreeTenABP para suporte a LocalDate em API < 26
-        AndroidThreeTen.init(this)
 
         setContent {
             val navController = rememberNavController()
@@ -64,7 +54,7 @@ class MainActivity : ComponentActivity() {
                 val currentBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = currentBackStackEntry?.destination?.route
 
-                androidx.compose.material3.Scaffold(
+                Scaffold(
                     modifier = Modifier.fillMaxSize(),
                     topBar = {
                         // Mostra a TopBar apenas se não estivermos no Login ou Registo
@@ -93,7 +83,7 @@ class MainActivity : ComponentActivity() {
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
                                 onCheckInOutClick = { /* Ação Check-in/Out */ },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
-                                onCalendarClick = { navController.navigate(Screen.Calendar.route)},
+                                onCalendarClick = { navController.navigate(Screen.Calendar.route) },
                                 onPortalClick = { /* Ação Portal */ },
                                 showPortal = (userRole.value == "admin")
                             )
@@ -156,8 +146,8 @@ class MainActivity : ComponentActivity() {
 
                         // Calendário
                         composable(Screen.Calendar.route) {
-                            CalendarViewVoluntario(
-                                onDaySelected =  {selectedDate ->
+                            CalendarView(
+                                onDaySelected = { selectedDate ->
                                     println("Selected date: $selectedDate")
                                 },
                                 selectedDates = listOf(
@@ -170,9 +160,6 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.DonationsList.route) {
                             DonationsListView()
                         }
-                        /*composable(Screen.Calendar.route) {
-                            CalendarView()
-                        }*/
                     }
 
                     DisposableEffect(Unit) {
@@ -197,12 +184,9 @@ class MainActivity : ComponentActivity() {
                             auth.removeAuthStateListener(authListener)
                         }
                     }
-
-
                 }
             }
         }
-
     }
 }
 
@@ -214,5 +198,4 @@ sealed class Screen(val route: String) {
     object Donations : Screen("donations")
     object DonationsList : Screen("donationsList")
     object Calendar : Screen("calendar")
-
 }

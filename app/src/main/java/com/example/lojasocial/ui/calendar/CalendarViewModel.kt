@@ -3,15 +3,11 @@ package com.example.lojasocial.ui.calendar
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.lojasocial.ui.donations.DonationsState
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import com.google.firebase.firestore.FirebaseFirestore
 import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
-import org.threeten.bp.format.DateTimeParseException
-
 
 data class Calendario(
     var startMonth: String = "",
@@ -21,25 +17,29 @@ data class Calendario(
 )
 
 class CalendarViewModel : ViewModel() {
-    private val _state = MutableStateFlow(Calendario())
-    val state: StateFlow<Calendario> = _state
 
+    // Fluxo de estado para gerenciar o calendário
+    private val _state = MutableStateFlow(Calendario())
+    val state: StateFlow<Calendario> = _state.asStateFlow()
+
+    // Firestore para carregar e atualizar datas disponíveis
     private val firestore = FirebaseFirestore.getInstance()
 
+    // Estado para armazenar as datas disponíveis
     private val _availableDates = mutableStateOf(setOf<LocalDate>())
-    //val availableDates: Thread.State<Set<LocalDate>> = _availableDates
+    val availableDates: StateFlow<Set<LocalDate>> get() = _availableDates.asStateFlow()
 
     init {
         loadAvailableDates()
     }
 
-    // Carrega as datas disponíveis do Firestore
+    // Função para carregar datas disponíveis do Firestore
     private fun loadAvailableDates() {
         firestore.collection("availableDates")
             .get()
             .addOnSuccessListener { result ->
                 val dates = result.documents.mapNotNull { doc ->
-                    LocalDate.parse(doc.getString("date"))
+                    doc.getString("date")?.let { LocalDate.parse(it) }
                 }.toSet()
                 _availableDates.value = dates
             }
@@ -48,18 +48,22 @@ class CalendarViewModel : ViewModel() {
             }
     }
 
-    // Alterna a disponibilidade da data e atualiza no Firestore
+    // Alterna a disponibilidade de uma data e atualiza o Firestore
     fun toggleAvailability(date: LocalDate) {
         val updatedDates = _availableDates.value.toMutableSet()
+
         if (updatedDates.contains(date)) {
+            // Remove a data se já estiver presente
             updatedDates.remove(date)
             firestore.collection("availableDates").document(date.toString()).delete()
         } else {
+            // Adiciona a data se não estiver presente
             updatedDates.add(date)
             firestore.collection("availableDates").document(date.toString())
                 .set(mapOf("date" to date.toString()))
         }
+
+        // Atualiza o estado local com as novas datas disponíveis
         _availableDates.value = updatedDates
     }
 }
-

@@ -41,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -53,6 +52,7 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.gridlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -61,26 +61,27 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // Firebase Firestore
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation("com.google.firebase:firebase-firestore:24.6.0")
-    implementation("androidx.compose.ui:ui:1.5.0")
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("com.google.firebase:firebase-firestore:25.1.1")
+
+    // Dependências de Compose
+    implementation("androidx.compose.ui:ui:1.7.6")
+    implementation("androidx.compose.material3:material3:1.3.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
-    implementation("androidx.compose.material3:material3:1.2.0")
-    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    // Calendário
     implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
-    implementation("androidx.compose.compiler:compiler:1.5.0")
-    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
 
-    // The compose calendar library for Android
+    // Outros
     implementation("com.kizitonwose.calendar:compose:2.6.1")
+    implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.navigation:navigation-compose:2.8.5")
 
-    implementation("com.google.android.material:material:1.11.0")
-
-    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // Adicionando ThreeTenABP para LocalDate em versões menores que API 26
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.6")
 }
