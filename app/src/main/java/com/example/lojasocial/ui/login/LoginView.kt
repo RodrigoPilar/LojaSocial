@@ -25,9 +25,8 @@ fun LoginView(
     modifier: Modifier = Modifier,
     onLoginSuccess: () -> Unit = {},
     onNavigateToRegisto: () -> Unit = {}
-
 ) {
-    // Inicializa o ViewModel e observa o estado
+    //Inicializa o ViewModel e observa o estado
     val viewModel: LoginViewModel = viewModel()
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -144,5 +143,6 @@ fun LoginView(
         }
     }
 }
+
 
 
