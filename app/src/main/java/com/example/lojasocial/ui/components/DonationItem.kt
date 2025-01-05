@@ -25,7 +25,7 @@ fun DonationItem(donation: DonationsState) {
             .padding(16.dp)
     ) {
         Column {
-            Text("Nome: ${donation.nome}")
+            Text("Nome: ${if (donation.nome.isBlank()) "Doação anónima" else donation.nome}")
             Text("Tipo: ${donation.tipo}")
             if (donation.valor.isNotEmpty()) {
                 Text("Valor: ${donation.valor} €")
