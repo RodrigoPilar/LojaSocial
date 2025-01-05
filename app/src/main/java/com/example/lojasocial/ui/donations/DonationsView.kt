@@ -51,7 +51,10 @@ import androidx.compose.material3.ButtonDefaults
 @Composable
 fun donationsView(
     modifier: Modifier = Modifier,
-    onFileSelected: (Uri) -> Unit = {}
+    onFileSelected: (Uri) -> Unit = {},
+    isAdmin: Boolean = false, // Parâmetro para verificar se é admin
+    onConsultarDoacoesClick: () -> Unit // Callback para o botão "Consultar Doações"
+
 ) {
     // Inicializa o ViewModel e observa o estado
     val viewModel: DonationsViewModel = viewModel()
@@ -123,7 +126,7 @@ fun donationsView(
         // Campo de Tipo de Doação
         TextField(
             value = state.tipo,
-            onValueChange = { viewModel.onTipoChange(it)},
+            onValueChange = { viewModel.onTipoChange(it) },
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
@@ -152,7 +155,8 @@ fun donationsView(
                         state.tipo = label
                         expanded = false
                         showOutros = state.tipo == "Outros" // Mostra o textField caso seja Outros
-                        showValor = state.tipo == "Dinheiro" // Mostra o textField caso seja Dinheiro
+                        showValor =
+                            state.tipo == "Dinheiro" // Mostra o textField caso seja Dinheiro
                         Log.d("DonationsView", "Selected Option: $state.tipo")
                     }
                 )
@@ -250,5 +254,18 @@ fun donationsView(
             Text("Guardar")
         }
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Botão "Consultar Doações" visível apenas para admin
+        if (isAdmin) {
+            Button(
+                onClick = { onConsultarDoacoesClick() },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4285F4))
+            ) {
+                Text("Consultar Doações")
+            }
+
+        }
     }
 }
