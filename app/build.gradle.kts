@@ -63,22 +63,21 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-analytics")
-    implementation ("com.google.firebase:firebase-firestore:24.6.0")
-    implementation ("androidx.compose.ui:ui:1.5.0")
-    implementation ("androidx.compose.material3:material3:1.2.0")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation("com.google.firebase:firebase-firestore:24.6.0")
+    implementation("androidx.compose.ui:ui:1.5.0")
+    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
     implementation("androidx.compose.material3:material3:1.2.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
-    implementation ("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
-    implementation ("androidx.compose.compiler:compiler:1.5.0")
-    implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
+    implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
+    implementation("androidx.compose.compiler:compiler:1.5.0")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
 
-
-
-
+    // The compose calendar library for Android
+    implementation("com.kizitonwose.calendar:compose:2.6.1")
 
 }
