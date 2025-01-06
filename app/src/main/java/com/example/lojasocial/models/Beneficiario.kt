@@ -1,10 +1,8 @@
 package com.example.lojasocial.models
 
 data class Beneficiario(
+    var id: String = "",
     val nome: String = "",
     val telefone: String = "",
-    val agregadoFamiliar: String = "",
-    val nacionalidade: String = "",
-    val freguesia: String = "",
-    val primeiraVisita: Boolean = false
+    val agregadoFamiliar: String = ""
 )

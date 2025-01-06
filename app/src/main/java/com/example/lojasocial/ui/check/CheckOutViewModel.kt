@@ -1,54 +1,70 @@
 package com.example.lojasocial.ui.check
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.lojasocial.models.Beneficiario
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.tasks.await
+import java.util.logging.Logger
 
-class CheckInViewModel : ViewModel() {
+class CheckOutViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
+    private val _beneficiariosNaLoja = MutableStateFlow<List<Map<String, Any>>>(emptyList())
+    val beneficiariosNaLoja: StateFlow<List<Map<String, Any>>> = _beneficiariosNaLoja
 
-    var nome by mutableStateOf("")
-    var telefone by mutableStateOf("")
-    var agregadoFamiliar by mutableStateOf("")
-    var nacionalidade by mutableStateOf("")
-    var freguesia by mutableStateOf("")
-    var numVisitasComArtigos by mutableStateOf("")
-    var numVisitasSemArtigos by mutableStateOf("")
-    var advertenciasRecebidas by mutableStateOf("")
-    var listaArtigos by mutableStateOf("")
+    init {
+        carregarBeneficiariosNaLoja()
+    }
 
-    // Atualizadores
-    fun onNomeChange(newNome: String) { nome = newNome }
-    fun onTelefoneChange(newTelefone: String) { telefone = newTelefone }
-    fun onAgregadoFamiliarChange(newAgregadoFamiliar: String) { agregadoFamiliar = newAgregadoFamiliar }
-    fun onNacionalidadeChange(newNacionalidade: String) { nacionalidade = newNacionalidade }
-    fun onFreguesiaChange(newFreguesia: String) { freguesia = newFreguesia }
-    fun onNumVisitasComArtigosChange(newNum: String) { numVisitasComArtigos = newNum }
-    fun onNumVisitasSemArtigosChange(newNum: String) { numVisitasSemArtigos = newNum }
-    fun onAdvertenciasRecebidasChange(newValue: String) { advertenciasRecebidas = newValue }
-    fun onListaArtigosChange(newLista: String) { listaArtigos = newLista }
+    private fun carregarBeneficiariosNaLoja() {
+        db.collection("BeneficiariosNaLoja")
+            .get()
+            .addOnSuccessListener { result ->
+                val beneficiarios = result.documents.map { document ->
+                    document.data?.toMutableMap()?.apply {
+                        this["id"] = document.id
+                    } ?: emptyMap()
+                }
+                _beneficiariosNaLoja.value = beneficiarios
+            }
+            .addOnFailureListener { exception ->
+                Logger.getLogger("CheckOutViewModel").warning("Erro ao carregar beneficiarios na loja: ${exception.message}")
+            }
+    }
 
-    // Função para guardar a primeira visita
-    fun guardarPrimeiraVisita(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        val beneficiario = hashMapOf(
-            "nome" to nome,
-            "telefone" to telefone,
-            "agregadoFamiliar" to agregadoFamiliar,
-            "nacionalidade" to nacionalidade,
-            "freguesia" to freguesia,
-            "primeiraVisita" to true
+    fun checkOut(
+        beneficiario: Map<String, Any>,
+        levaArtigos: Boolean,
+        quantidade: Int?,
+        artigosControlados: Boolean,
+        descricaoArtigo: String?
+    ) {
+        val visita = hashMapOf(
+            "beneficiarioId" to (beneficiario["id"] ?: ""),
+            "nome" to (beneficiario["nome"] ?: ""),
+            "levaArtigos" to levaArtigos,
+            "quantidade" to (quantidade ?: 0),
+            "artigosControlados" to artigosControlados,
+            "descricaoArtigo" to (descricaoArtigo ?: "" ),
         )
 
-        db.collection("Beneficiário")
-            .add(beneficiario)
-            .addOnSuccessListener { onSuccess() }
+        val beneficiarioId = beneficiario["id"] as? String ?: return
+
+        db.collection("Visitas")
+            .add(visita)
+            .addOnSuccessListener {
+                db.collection("BeneficiariosNaLoja").document(beneficiarioId).delete()
+                    .addOnSuccessListener {
+                        _beneficiariosNaLoja.value = _beneficiariosNaLoja.value.filter {
+                            it["id"] != beneficiarioId
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Logger.getLogger("CheckOutViewModel").warning("Erro ao remover beneficiário da coleção BeneficiariosNaLoja: ${exception.message}")
+                    }
+            }
             .addOnFailureListener { exception ->
-                onFailure(exception.message ?: "Erro ao guardar os dados.")
+                Logger.getLogger("CheckOutViewModel").warning("Erro ao registrar a visita: ${exception.message}")
             }
     }
 }
-
-

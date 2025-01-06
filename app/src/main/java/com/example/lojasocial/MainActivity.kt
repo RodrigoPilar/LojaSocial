@@ -20,6 +20,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
+import com.example.lojasocial.ui.check.CheckInView
+import com.example.lojasocial.ui.check.CheckOutView
 //import com.example.lojasocial.ui.calendar.CalendarView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
@@ -28,7 +30,6 @@ import com.example.lojasocial.ui.donations.donationsView
 import com.example.lojasocial.ui.login.LoginView
 import com.example.lojasocial.ui.profile.ProfileView
 import com.example.lojasocial.ui.registo.RegistoView
-import com.example.lojasocial.ui.check.CheckInView
 import com.example.lojasocial.ui.theme.LojaSocialTheme
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -91,7 +92,7 @@ class MainActivity : ComponentActivity() {
                             BottomNavigationBar(
                                 onHomeClick = { navController.navigate(Screen.Home.route) },
                                 onCheckInClick = { navController.navigate(Screen.CheckIn.route) },
-                                onCheckOutClick = { /* Ação Check-in/Out */ },
+                                onCheckOutClick = { navController.navigate(Screen.CheckOut.route) },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onCalendarClick = { navController.navigate(Screen.Calendar.route)},
                                 onPortalClick = { /* Ação Portal */ },
@@ -133,7 +134,7 @@ class MainActivity : ComponentActivity() {
                         composable(Screen.Home.route) {
                             HomeView(
                                 onCheckInClick = { navController.navigate(Screen.CheckIn.route) },
-                                onCheckOutClick = { /* Ação Check-in/Out */ },
+                                onCheckOutClick = { navController.navigate(Screen.CheckOut.route) },
                                 onCalendarClick = { navController.navigate(Screen.Calendar.route) },
                                 onDonationsClick = { navController.navigate(Screen.Donations.route) },
                                 onPortalClick = { /* Ação Portal */ },
@@ -147,6 +148,10 @@ class MainActivity : ComponentActivity() {
 
                         composable(Screen.CheckIn.route) {
                             CheckInView()
+                        }
+
+                        composable(Screen.CheckOut.route) {
+                            CheckOutView()
                         }
 
                         // Página de doações
@@ -206,5 +211,6 @@ sealed class Screen(val route: String) {
     object DonationsList : Screen("donationsList")
     object Calendar : Screen("calendar")
     object CheckIn : Screen("checkin")
+    object CheckOut : Screen("checkout")
 
 }

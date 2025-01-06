@@ -65,17 +65,18 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation ("com.google.firebase:firebase-firestore:24.6.0")
     implementation ("androidx.compose.ui:ui:1.5.0")
-    implementation ("androidx.compose.material3:material3:1.2.0")
+    implementation ("androidx.compose.ui:ui-tooling:1.5.0")
     implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation ("androidx.compose.foundation:foundation:1.5.0")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
-
-    implementation("androidx.compose.material3:material3:1.2.0")
+    implementation("androidx.compose.material3:material3:1.2.0-alpha08")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation ("io.github.boguszpawlowski.composecalendar:composecalendar:1.3.0")
     implementation ("androidx.compose.compiler:compiler:1.5.0")
     implementation ("com.jakewharton.threetenabp:threetenabp:1.3.1")
+    implementation ("com.github.Breens-Mbaka:Searchable-Dropdown-Menu-Jetpack-Compose:0.2.8")
 
 
 
