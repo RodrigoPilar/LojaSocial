@@ -21,10 +21,14 @@ fun TopBar(
     TopAppBar(
         title = {}, // Sem título na TopBar
         navigationIcon = {
-            UserMenu( // Aqui chamamos o UserMenu
-                onProfileClick = onProfileClick,
-                onLogoutClick = onLogoutClick
-            )
+            IconButton(onClick = onProfileClick) {
+                Icon(
+                    imageVector = Icons.Default.Person, // Ícone de perfil
+                    contentDescription = "Profile",
+                    modifier = Modifier.size(40.dp), // Ajusta o tamanho do ícone
+                    tint = Color.White
+                )
+            }
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFFBD4143), // Cor de fundo da TopBar
@@ -32,4 +36,8 @@ fun TopBar(
         ),
         modifier = Modifier.height(56.dp)
     )
+
 }
+
+
+

@@ -23,7 +23,8 @@ import com.example.lojasocial.ui.components.TopBar
 
 @Composable
 fun HomeView(
-    onCheckInOutClick: () -> Unit = {},
+    onCheckInClick: () -> Unit = {},
+    onCheckOutClick: () -> Unit = {},
     onCalendarClick: () -> Unit = {},
     onDonationsClick: () -> Unit = {},
     onPortalClick: () -> Unit = {},
@@ -39,15 +40,30 @@ fun HomeView(
 
         // Botões de navegação
         NavigationButton(
-            text = "Check in/out",
+            text = "Check In",
             iconId = R.drawable.ic_checkin,
-            onClick = onCheckInOutClick
+            onClick = onCheckInClick
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Botões de navegação
+        NavigationButton(
+            text = "Check Out",
+            iconId = R.drawable.ic_checkout,
+            onClick = onCheckOutClick
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         NavigationButton(
             text = "Calendário",
             iconId = R.drawable.ic_calendar,
             onClick = onCalendarClick
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         NavigationButton(
             text = "Doações",
             iconId = R.drawable.ic_donation,
@@ -56,12 +72,14 @@ fun HomeView(
 
         // Botão do Portal de Avaliação, exibido apenas se showPortal for true
         if (showPortal) {
+            Spacer(modifier = Modifier.height(16.dp))
             NavigationButton(
                 text = "Portal de Avaliação",
                 iconId = R.drawable.ic_rateview,
                 onClick = onPortalClick
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
     }
 }
 
@@ -75,7 +93,7 @@ fun NavigationButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(80.dp)
             .padding(vertical = 8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB71C1C)),
         shape = RoundedCornerShape(16.dp)
@@ -88,13 +106,14 @@ fun NavigationButton(
                 painter = painterResource(id = iconId),
                 contentDescription = text,
                 tint = Color.White,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(34.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = text,
                 color = Color.White,
-                fontSize = 16.sp
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold
             )
         }
     }
