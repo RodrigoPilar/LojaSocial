@@ -1,8 +1,14 @@
 package com.example.lojasocial.ui.check
 
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
+import com.example.lojasocial.Screen
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,11 +21,40 @@ class CheckOutViewModel : ViewModel() {
     private val _beneficiariosNaLoja = MutableStateFlow<List<Map<String, Any>>>(emptyList())
     val beneficiariosNaLoja: StateFlow<List<Map<String, Any>>> = _beneficiariosNaLoja
 
+    var nome by mutableStateOf("")
+    var telefone by mutableStateOf("")
+    var agregadoFamiliar by mutableStateOf("")
+    var beneficiarioId by mutableStateOf("")
+
     init {
         carregarBeneficiariosNaLoja()
     }
 
     private fun carregarBeneficiariosNaLoja() {
+        val documentRef = db.collection("BeneficiariosNaLoja").document()
+
+        documentRef.get().addOnSuccessListener { document ->
+            if (!document.exists()) {
+                val beneficiarioNaLoja = hashMapOf(
+                    "beneficiarioId" to beneficiarioId,
+                    "nome" to nome,
+                    "telefone" to telefone,
+                    "agregadoFamiliar" to agregadoFamiliar
+                )
+
+                documentRef.set(beneficiarioNaLoja)
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "Tabela criada com sucesso")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.w("Firestore", "Erro a criar o documento", e)
+                    }
+            }
+        }.addOnFailureListener { e ->
+            Log.w("Firestore", "Error getting document", e)
+            return@addOnFailureListener
+        }
+
         db.collection("BeneficiariosNaLoja")
             .get()
             .addOnSuccessListener { result ->
@@ -35,6 +70,7 @@ class CheckOutViewModel : ViewModel() {
                     .warning("Erro ao carregar beneficiarios na loja: ${exception.message}")
             }
     }
+
 
     fun checkOut(
         beneficiario: Map<String, Any>,

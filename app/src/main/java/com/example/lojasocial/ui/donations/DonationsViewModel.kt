@@ -67,18 +67,19 @@ class DonationsViewModel : ViewModel() {
         }
     }
 
+    val donation = hashMapOf(
+        "nome" to _state.value.nome,
+        "telefone" to _state.value.telefone,
+        "data" to _state.value.data,
+        "ficheiro" to _state.value.ficheiro,
+        "outros" to _state.value.outros,
+        "valor" to _state.value.valor,
+        "tipo" to _state.value.tipo,
+        "filePath" to _state.value.filePath
+    )
+
     // Função para guardar no Firestore
     fun guardar(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
-        val donation = hashMapOf(
-            "nome" to _state.value.nome,
-            "telefone" to _state.value.telefone,
-            "data" to _state.value.data,
-            "ficheiro" to _state.value.ficheiro,
-            "outros" to _state.value.outros,
-            "valor" to _state.value.valor,
-            "tipo" to _state.value.tipo,
-            "filePath" to _state.value.filePath
-        )
 
         if (_state.value.tipo.isBlank() || _state.value.data.isBlank()) {
             _state.update { it.copy(errorMessage = "Por favor, preencha todos os campos obrigatórios.") }
