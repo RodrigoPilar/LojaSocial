@@ -13,11 +13,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lojasocial.ui.components.CheckOutContainer
+import kotlinx.coroutines.delay
 
 @Composable
-fun CheckOutView(viewModel: CheckOutViewModel = viewModel() ) {
+fun CheckOutView(viewModel: CheckOutViewModel = viewModel()) {
     val context = LocalContext.current
     val beneficiariosNaLoja by viewModel.beneficiariosNaLoja.collectAsState()
     var selectedBeneficiary by remember { mutableStateOf<Map<String, Any>?>(null) }
@@ -37,8 +39,7 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel() ) {
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .height(48.dp)
                 .background(
-                    color = Color(0xFFBD4143),
-                    shape = RoundedCornerShape(50)
+                    color = Color(0xFFBD4143), shape = RoundedCornerShape(50)
                 )
         ) {
             Text(
@@ -65,11 +66,12 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel() ) {
                     shape = RoundedCornerShape(8.dp)
                 ) {
                     Column(
-                        modifier = Modifier
-                            .padding(16.dp)
+                        modifier = Modifier.padding(16.dp)
                     ) {
                         Text(text = "Nome: $nome", style = MaterialTheme.typography.bodyMedium)
-                        Text(text = "Telefone: $telefone", style = MaterialTheme.typography.bodySmall)
+                        Text(
+                            text = "Telefone: $telefone", style = MaterialTheme.typography.bodySmall
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                         Button(
                             onClick = { showContainer = !showContainer },
@@ -81,21 +83,21 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel() ) {
                         // Mostrar CheckOutContainer quando o botão for clicado
                         if (showContainer) {
                             Spacer(modifier = Modifier.height(8.dp))
-                            CheckOutContainer(
-                                onCheckOut = { levaArtigos, quantidade, artigosControlados, descricaoArtigo ->
-                                    viewModel.checkOut(
-                                        beneficiario,
-                                        levaArtigos,
-                                        quantidade,
-                                        artigosControlados,
-                                        descricaoArtigo
-                                    )
-                                    showContainer = false // Fechar container após o check-out
-                                },
-                                onCancel = {
-                                    showContainer = false // Fechar container ao cancelar
-                                }
-                            )
+                            CheckOutContainer(onCheckOut = { levaArtigos, quantidade, artigosControlados, descricaoArtigo ->
+                                println("DEBUG: onCheckOut called with: levaArtigos = $levaArtigos, quantidade=$quantidade")
+                                println("DEBUG: beneficiario data: $beneficiario")
+                                viewModel.checkOut(
+                                    beneficiario,
+                                    levaArtigos,
+                                    quantidade,
+                                    artigosControlados,
+                                    descricaoArtigo
+                                )
+                                showContainer = false // Fechar container após o check-out
+
+                            }, onCancel = {
+                                showContainer = false // Fechar container ao cancelar
+                            })
                         }
                     }
                 }
@@ -106,9 +108,7 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel() ) {
 
 @Composable
 fun BeneficiarioItem(
-    nome: String,
-    telefone: String,
-    onCheckOutClick: () -> Unit
+    nome: String, telefone: String, onCheckOutClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -118,8 +118,7 @@ fun BeneficiarioItem(
         shape = RoundedCornerShape(8.dp)
     ) {
         Column(
-            modifier = Modifier
-                .padding(16.dp)
+            modifier = Modifier.padding(16.dp)
         ) {
             Text(text = "Nome: $nome", style = MaterialTheme.typography.bodyMedium)
             Text(text = "Telefone: $telefone", style = MaterialTheme.typography.bodySmall)

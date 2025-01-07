@@ -20,15 +20,6 @@ data class DonationsState(
     val errorMessage: String? = null // Campo para armazenar mensagens de erro
 )
 
-data class Donation(
-    val nome: String = "",
-    val telefone: String = "",
-    val data: String = "",
-    val tipo: String = "",
-    val valor: String = "",
-    val outros: String = "",
-)
-
 class DonationsViewModel : ViewModel() {
     private val _state = MutableStateFlow(DonationsState())
     val state: StateFlow<DonationsState> = _state

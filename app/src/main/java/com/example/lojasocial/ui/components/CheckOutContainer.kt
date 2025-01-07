@@ -9,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.lojasocial.ui.check.CheckOutViewModel
 
 @Composable
 fun CheckOutContainer(
@@ -20,6 +22,7 @@ fun CheckOutContainer(
     var quantidade by remember { mutableStateOf("") }
     var descricaoArtigoControlado by remember { mutableStateOf("") }
     var quantidadeError by remember { mutableStateOf(false) }
+    val viewModel: CheckOutViewModel = viewModel()
 
     Column(
         modifier = Modifier
@@ -112,7 +115,9 @@ fun CheckOutContainer(
                         return@Button
                     }
                     val descricao = if (artigosControlados) descricaoArtigoControlado else null
+
                     onCheckOut(levaArtigos, quantidadeInt ?: 0, artigosControlados, descricao)
+
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFBD4143))
             ) {

@@ -18,17 +18,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,7 +54,6 @@ fun donationsView(
     onFileSelected: (Uri) -> Unit = {},
     isAdmin: Boolean = false, // Parâmetro para verificar se é admin
     onConsultarDoacoesClick: () -> Unit // Callback para o botão "Consultar Doações"
-
 ) {
     // Inicializa o ViewModel e observa o estado
     val viewModel: DonationsViewModel = viewModel()
@@ -78,7 +77,8 @@ fun donationsView(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp) // Additional padding for aesthetics
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
 
         Box(
@@ -126,7 +126,7 @@ fun donationsView(
         // Campo de Tipo de Doação
         TextField(
             value = state.tipo,
-            onValueChange = { viewModel.onTipoChange(it) },
+            onValueChange = { viewModel.onTipoChange(it)},
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { coordinates ->
@@ -155,8 +155,7 @@ fun donationsView(
                         state.tipo = label
                         expanded = false
                         showOutros = state.tipo == "Outros" // Mostra o textField caso seja Outros
-                        showValor =
-                            state.tipo == "Dinheiro" // Mostra o textField caso seja Dinheiro
+                        showValor = state.tipo == "Dinheiro" // Mostra o textField caso seja Dinheiro
                         Log.d("DonationsView", "Selected Option: $state.tipo")
                     }
                 )
@@ -254,18 +253,5 @@ fun donationsView(
             Text("Guardar")
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Botão "Consultar Doações" visível apenas para admin
-        if (isAdmin) {
-            Button(
-                onClick = { onConsultarDoacoesClick() },
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4285F4))
-            ) {
-                Text("Consultar Doações")
-            }
-
-        }
     }
 }
