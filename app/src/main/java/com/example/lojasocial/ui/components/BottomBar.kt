@@ -25,42 +25,56 @@ import com.example.lojasocial.R
 @Composable
 fun BottomNavigationBar(
     onHomeClick: () -> Unit,
-    onCheckInOutClick: () -> Unit,
+    onCheckInClick: () -> Unit,
+    onCheckOutClick: () -> Unit,
     onCalendarClick: () -> Unit,
     onDonationsClick: () -> Unit,
     onPortalClick: () -> Unit,
     showPortal: Boolean
 ) {
     BottomAppBar(
-        modifier = Modifier.height(64.dp),
+        modifier = Modifier
+            .height(64.dp)
+            .fillMaxWidth(), // Garante que ocupa toda a largura
         containerColor = Color(0xFFBD4143)
     ) {
-        BottomNavigationIcon(
-            icon = Icons.Default.Home,
-            contentDescription = "Home",
-            onClick = onHomeClick
-        )
-        BottomNavigationIcon(
-            icon = R.drawable.ic_checkin,
-            contentDescription = "Check in/out",
-            onClick = onCheckInOutClick
-        )
-        BottomNavigationIcon(
-            icon = R.drawable.ic_calendar,
-            contentDescription = "Calendário",
-            onClick = onCalendarClick
-        )
-        BottomNavigationIcon(
-            icon = R.drawable.ic_donation,
-            contentDescription = "Doações",
-            onClick = onDonationsClick
-        )
-        if (showPortal) { // Mostra o botão Portal apenas se showPortal for true
+        // Distribuir ícones uniformemente com Row e weight
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly // Espaçamento uniforme
+        ) {
             BottomNavigationIcon(
-                icon = R.drawable.ic_rateview,
-                contentDescription = "Portal de Avaliação",
-                onClick = onPortalClick
+                icon = Icons.Default.Home,
+                contentDescription = "Home",
+                onClick = onHomeClick
             )
+            BottomNavigationIcon(
+                icon = R.drawable.ic_checkin,
+                contentDescription = "Check In",
+                onClick = onCheckInClick
+            )
+            BottomNavigationIcon(
+                icon = R.drawable.ic_checkout,
+                contentDescription = "Check Out",
+                onClick = onCheckOutClick
+            )
+            BottomNavigationIcon(
+                icon = R.drawable.ic_calendar,
+                contentDescription = "Calendário",
+                onClick = onCalendarClick
+            )
+            BottomNavigationIcon(
+                icon = R.drawable.ic_donation,
+                contentDescription = "Doações",
+                onClick = onDonationsClick
+            )
+            if (showPortal) { // Mostra o botão Portal apenas se showPortal for true
+                BottomNavigationIcon(
+                    icon = R.drawable.ic_rateview,
+                    contentDescription = "Portal de Avaliação",
+                    onClick = onPortalClick
+                )
+            }
         }
     }
 }
@@ -79,7 +93,7 @@ fun BottomNavigationIcon(
                     imageVector = icon,
                     contentDescription = contentDescription,
                     tint = if (isActive) Color.Gray else Color.White,
-                    modifier = Modifier.size(35.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
             is Int -> {
@@ -87,7 +101,7 @@ fun BottomNavigationIcon(
                     painter = painterResource(id = icon),
                     contentDescription = contentDescription,
                     tint = if (isActive) Color.Gray else Color.White,
-                    modifier = Modifier.size(35.dp)
+                    modifier = Modifier.size(40.dp)
                 )
             }
             else -> throw IllegalArgumentException("Tipo de ícone inválido: $icon")

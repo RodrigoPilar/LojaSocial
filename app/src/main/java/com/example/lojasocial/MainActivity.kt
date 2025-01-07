@@ -20,7 +20,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.lojasocial.ui.home.HomeView
 import com.example.lojasocial.repositories.UserRepository
-import com.example.lojasocial.ui.calendar.CalendarViewVoluntario
 //import com.example.lojasocial.ui.calendar.CalendarView
 import com.example.lojasocial.ui.components.BottomNavigationBar
 import com.example.lojasocial.ui.components.TopBar
@@ -37,7 +36,6 @@ import com.jakewharton.threetenabp.AndroidThreeTen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -214,5 +212,7 @@ sealed class Screen(val route: String) {
     object Donations : Screen("donations")
     object DonationsList : Screen("donationsList")
     object Calendar : Screen("calendar")
+    object CheckIn : Screen("checkin")
+    object CheckOut : Screen("checkout")
 
 }
