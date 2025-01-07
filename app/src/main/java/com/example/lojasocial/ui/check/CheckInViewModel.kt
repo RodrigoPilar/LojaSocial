@@ -1,5 +1,6 @@
 package com.example.lojasocial.ui.check
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -25,6 +26,7 @@ class CheckInViewModel : ViewModel() {
     var listaArtigos by mutableStateOf("")
     var mensagem by mutableStateOf<String?>(null) // Mensagem de feedback
 
+
     fun onNomeChange(newNome: String) { nome = newNome }
     fun onTelefoneChange(newTelefone: String) { telefone = newTelefone }
     fun onAgregadoFamiliarChange(newAgregadoFamiliar: String) { agregadoFamiliar = newAgregadoFamiliar }
@@ -34,6 +36,8 @@ class CheckInViewModel : ViewModel() {
     fun onNumVisitasSemArtigosChange(newNum: String) { numVisitasSemArtigos = newNum }
     fun onAdvertenciasRecebidasChange(newValue: String) { advertenciasRecebidas = newValue }
     fun onListaArtigosChange(newLista: String) { listaArtigos = newLista }
+
+
 
     // Validação dos campos obrigatórios
     private fun validarCamposObrigatorios(isFirstVisit: Boolean): Boolean {
@@ -162,14 +166,15 @@ class CheckInViewModel : ViewModel() {
     }
 
     private fun contabilizarVisitas(visitas: List<Map<String, Any>>) {
+        val artigosControlados = mutableListOf<String>()
         var visitasComArtigos = 0
         var visitasSemArtigos = 0
-        val artigosControlados = mutableListOf<String>()
 
         visitas.forEach { visita ->
             val levaArtigos = visita["levaArtigos"] as? Boolean ?: false
             val artigosControladosFlag = visita["artigosControlados"] as? Boolean ?: false
             val descricaoArtigo = visita["descricaoArtigo"] as? String ?: ""
+
 
             if (levaArtigos) {
                 visitasComArtigos++
@@ -193,8 +198,10 @@ class CheckInViewModel : ViewModel() {
             .whereEqualTo("beneficiarioId", beneficiarioId)
             .get()
             .addOnSuccessListener { result ->
+                println("############## - ID Beneficiário $beneficiarioId")
                 val visitas = result.documents.mapNotNull { it.data }
                 contabilizarVisitas(visitas)
+                println("############## - Visitas encontradas $visitas")
                 onSuccess() // Chama o callback de sucesso
             }
             .addOnFailureListener { exception ->
@@ -203,6 +210,7 @@ class CheckInViewModel : ViewModel() {
     }
 
     fun limparCampos() {
+        nome = ""
         telefone = ""
         agregadoFamiliar = ""
         nacionalidade = ""

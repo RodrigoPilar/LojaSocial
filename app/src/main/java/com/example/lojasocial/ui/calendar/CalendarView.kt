@@ -2,7 +2,9 @@ package com.example.lojasocial.ui.calendar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -41,15 +43,15 @@ fun CalendarViewVoluntario(
     )
     Box(
         modifier = Modifier
-            .fillMaxSize() // Ensures the box covers the entire available area
-            .background(color = Color.White) // Sets the background color to white
+            .fillMaxSize()
+            .background(color = Color.White)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
-
         ) {
             Box(
                 contentAlignment = Alignment.Center,

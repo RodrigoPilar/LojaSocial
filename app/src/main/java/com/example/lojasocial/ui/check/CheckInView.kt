@@ -17,6 +17,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lojasocial.models.Beneficiario
+import com.example.lojasocial.models.sanitizeInput
 import com.example.lojasocial.ui.check.CheckInViewModel
 
 
@@ -24,6 +25,7 @@ import com.example.lojasocial.ui.check.CheckInViewModel
 fun CheckInView(viewModel: CheckInViewModel = viewModel()) {
     var isFirstVisit by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
 
     Column(
         modifier = Modifier
@@ -76,7 +78,7 @@ fun CheckInView(viewModel: CheckInViewModel = viewModel()) {
                 viewModel.onNomeChange(it)
                 if (it.isNotBlank() && !isFirstVisit) {
                     viewModel.buscarBeneficiarioPorNome(
-                        nome = it,
+                        nome = sanitizeInput(it),
                         onSuccess = { beneficiario ->
                             viewModel.onTelefoneChange(beneficiario.telefone)
                             viewModel.onAgregadoFamiliarChange(beneficiario.agregadoFamiliar)
@@ -182,6 +184,7 @@ fun CheckInView(viewModel: CheckInViewModel = viewModel()) {
                         nome = viewModel.nome,
                         onSuccess = {
                             Toast.makeText(context, "Check-in realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                            viewModel.limparCampos()
                         },
                         onFailure = { errorMessage ->
                             Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
