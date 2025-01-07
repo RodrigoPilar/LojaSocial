@@ -51,21 +51,21 @@ class CheckInViewModel : ViewModel() {
         }
     }
 
+    val beneficiario = hashMapOf(
+        "nome" to nome,
+        "telefone" to telefone,
+        "agregadoFamiliar" to agregadoFamiliar,
+        "nacionalidade" to nacionalidade,
+        "freguesia" to freguesia,
+        "primeiraVisita" to true
+    )
+
     // Função para guardar a primeira visita
     fun guardarPrimeiraVisita(onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         if (!validarCamposObrigatorios(isFirstVisit = true)) {
             mensagem = "Campos obrigatórios por preencher"
             return
         }
-
-        val beneficiario = hashMapOf(
-            "nome" to nome,
-            "telefone" to telefone,
-            "agregadoFamiliar" to agregadoFamiliar,
-            "nacionalidade" to nacionalidade,
-            "freguesia" to freguesia,
-            "primeiraVisita" to true
-        )
 
         db.collection("Beneficiário")
             .add(beneficiario)
@@ -193,15 +193,14 @@ class CheckInViewModel : ViewModel() {
     }
 
 
+
     fun buscarVisitas(beneficiarioId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         db.collection("Visitas")
             .whereEqualTo("beneficiarioId", beneficiarioId)
             .get()
             .addOnSuccessListener { result ->
-                println("############## - ID Beneficiário $beneficiarioId")
                 val visitas = result.documents.mapNotNull { it.data }
                 contabilizarVisitas(visitas)
-                println("############## - Visitas encontradas $visitas")
                 onSuccess() // Chama o callback de sucesso
             }
             .addOnFailureListener { exception ->

@@ -1,5 +1,6 @@
 package com.example.lojasocial.ui.check
 
+import android.content.Intent.getIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.lojasocial.ui.components.CheckOutContainer
@@ -80,7 +82,6 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel()) {
                             Text(text = "Check-Out", color = Color.White)
                         }
 
-                        // Mostrar CheckOutContainer quando o botão for clicado
                         if (showContainer) {
                             Spacer(modifier = Modifier.height(8.dp))
                             CheckOutContainer(onCheckOut = { levaArtigos, quantidade, artigosControlados, descricaoArtigo ->
@@ -93,8 +94,7 @@ fun CheckOutView(viewModel: CheckOutViewModel = viewModel()) {
                                     artigosControlados,
                                     descricaoArtigo
                                 )
-                                showContainer = false // Fechar container após o check-out
-
+                                showContainer = false // Fechar container ao cancelar
                             }, onCancel = {
                                 showContainer = false // Fechar container ao cancelar
                             })
